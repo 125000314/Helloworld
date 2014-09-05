@@ -1,0 +1,156 @@
+﻿<html>
+	<head>
+		<script type="text/javascript" src="../static/js/jquery-1.8.3.js"></script>
+	</head>
+	
+	<body>
+		<table id="tableData">
+			<tr>
+				<td>全选</td>
+				<td><input type="checkbox" id="112" name="selectAll">selectAll</input></td>
+				<td><input type="checkbox" id="113" name="selectAll">selectAll</input></td>
+				<td><input type="checkbox" id="114" name="selectAll">selectAll</input></td>
+			</tr>
+			
+			<tr>
+				<td>主数据</td>
+				<td><input type="radio" value="0" name="column11">data1</input></td>
+				<td><input type="radio" value="1" name="column11">data2</input></td>
+				<td><input type="radio" value="2" name="column11">data3</input></td>
+			</tr>
+			<tr>
+				<td>用户名</td>
+				<td><input type="checkbox" value="112" name="column1"/><label></label></td>
+				<td><input type="checkbox" value="113" name="column2"/><label></label></td>
+				<td><input type="checkbox" value="114" name="column3"/><label></label></td>
+			</tr>
+			<tr>
+				<td>电话</td>
+				<td><input type="checkbox" value="112" name="column1"/><label></label></td>
+				<td><input type="checkbox" value="113" name="column2"/><label></label></td>
+				<td><input type="checkbox" value="114" name="column3"/><label></label></td>
+			</tr>
+			<tr>
+				<td>住址</td>
+				<td><input type="checkbox" value="112" name="column1"/><label></label></td>
+				<td><input type="checkbox" value="113" name="column2"/><label></label></td>
+				<td><input type="checkbox" value="114" name="column3"/><label></label></td>
+			</tr>
+		</table><br>
+		<input type="button" value="ok" id="okBtn">
+		<script type="text/javascript">
+			$(function(){
+				
+				var info = ["username", "phone", "address"]
+				var info2 = ["", "", "", ""]
+				
+				//模拟从数据库过来的数据
+				var userdata = {"data":[{"username":"a1", "phone":"b1", "address":"c1"},
+									{"username":"a2", "phone":"b2", "address":"c2"},
+									{"username":"a3", "phone":"b2", "address":"c3"},
+								   ]
+							}
+				var data = userdata.data
+				
+				//根据userdata的数据个数动态生成表的列数
+				var columnNumber = data.length
+				var tableContent = "<tr><td>selectAll</td><td><input type='checkbox' id='112' name='selectAll'>selectAll</input></td><td><input type='checkbox' id='113' name='selectAll'>selectAll</input></td><td><input type='checkbox' id='114' name='selectAll'>selectAll</input></td></tr><tr><td>main data</td><td><input type='radio' value='111' name='column11'>data1</input></td><td><input type='radio' value='111' name='column11'>data2</input></td><td><input type='radio' value='111' name='column11'>data3</input></td></tr>"
+				for(var i = 0; i <info.length; i++){
+					//第一行
+					tableContent += "<td>selectAll</td>"
+					for(var j = 0; j < columnNumber; j++){
+						
+					}
+					//第二行
+				}
+				
+				
+				//将数据显示在页面上
+				for(var i = 0; i < columnNumber; i++){
+					//alert(data[i].username)
+					//alert($("table tr:eq(2) td:eq(" + (i +1) + ") label").text())
+					
+					var counter = 0
+					$("table tr:eq(2) td:eq(" + (i + 1) + ") label").text(data[i].username)
+					$("table tr:eq(3) td:eq(" + (i + 1) + ") label").text(data[i].phone)
+					$("table tr:eq(4) td:eq(" + (i + 1) + ") label").text(data[i].address)
+				}
+				
+				//设置全选按钮
+				$("table tr td input#112").click(function(){
+					alert($(this).attr("checked")=='true' || $(this).attr("checked")=='checked'? true:false)
+					$("input[name=column1]").attr("checked",  $(this).attr("checked")=='true' || $(this).attr("checked")=='checked'? true:false)
+					})
+				$("table tr td input#113").click(function(){
+					$("input[name=column2]").attr("checked", $(this).attr("checked"))
+					
+					})
+				$("table tr td input#114").click(function(){
+					$("input[name=column3]").attr("checked", $(this).attr("checked"))
+					
+					})
+				$("input[name=column1]").click(function(){
+					if(!$(this).attr("checked") ){
+						$("table tr td input#112").removeAttr("checked")
+					}
+					})
+				$("input[name=column2]").click(function(){
+					if(!$(this).attr("checked") ){
+						$("table tr td input#113").removeAttr("checked")
+					}
+					})
+				$("input[name=column3]").click(function(){
+					if(!$(this).attr("checked") ){
+						$("table tr td input#114").removeAttr("checked")
+					}
+					})
+				
+				//模拟提交按钮
+				$("input#okBtn").click(function(){
+						//username
+						//alert($("table tr:eq(2) td input:checked+label").text())
+						var usernameall = "";
+						$("table tr:eq(2) td input:checked+label").each(function(){
+								usernameall = usernameall + $(this).text() + " "
+							})
+						if(usernameall == ""){
+							alert("please set a username")
+						}
+						
+						//phone
+						var phoneall = "";
+						$("table tr:eq(3) td input:checked+label").each(function(){
+								phoneall = phoneall + $(this).text() + " "
+							})
+						if(phoneall == ""){
+							alert("please set a phone")
+							
+						}
+						//address
+						var addressall = "";
+						$("table tr:eq(4) td input:checked+label").each(function(){
+								addressall = addressall + $(this).text() + " "
+							})
+						if(addressall == ""){
+							alert("please set a address")
+						}
+						
+						alert("username:" + usernameall + "     phoneall:" + phoneall +"    addressall:" + addressall)
+						
+							$.ajax({
+								type:"POST",
+								url:"/userInfo2/",
+								datatype:"json",
+								data:{'usernameall':usernameall,'phoneall':phoneall, "addressall":addressall},
+								success: function(returnedData){
+									alert(returnedData)
+									
+									
+								}
+							})
+					})
+				
+			})
+		</script>
+	</body>
+</html>

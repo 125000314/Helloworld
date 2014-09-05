@@ -1,0 +1,35 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=GBK"/>
+<title></title>
+	<script type="text/javascript" src='../static/js/jquery-1.8.3.js'>
+	</script>
+	<script type="text/javascript">
+		$(function(){
+			//alert('aa')
+			
+			$("#btn1").click(function(){
+				$.ajax({
+					type:"POST",//TYPE ='GET' OK , "POST need do something special"
+					url:"/userInfo/",
+					datatype:"json",
+					data:{'username':$("#username").val(),'password':$("#password").val()},
+					success: function(returnedData){
+						alert(returnedData)
+						returnedData = eval( "(" + returnedData + ")")
+						alert(returnedData.username)
+						alert(returnedData["username"])
+						alert(returnedData.password)
+						alert(returnedData["password"])
+					}
+				})
+			})
+		})
+	</script>
+</head>
+<body>
+	username<input type="text" id="username"><br>
+	password<input type="password" id="password">
+	<input type="button" value="submit" id="btn1">
+</body>
+</html>
